@@ -1,5 +1,4 @@
 import numpy as np
 import pandas as pd
-
-df=pd.DataFrame(lst,columns=['hi','yo'])
-print(df)
+import cv2
+from matplotlib import pyplot as plt
