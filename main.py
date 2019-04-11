@@ -6,9 +6,9 @@ import pandas as pd
 
 huarray=[]
 
-def writefile(data):
-    df=pd.DataFrame(np.array(data,dtype="object"),columns=['Label','MEI','MHI'])
-    with open("output/dataset.csv",'w+') as f:
+def writefile(data,path):
+    df=pd.DataFrame(np.array(data,dtype="object"),columns=['Label','h[0]','h[1]','h[2]','h[3]','h[4]','h[5]','h[6]'])
+    with open(path,'w+') as f:
         df.to_csv(f,mode='a',header=False)
 
 def videoplay():
@@ -30,12 +30,16 @@ def videoplay():
     cv2.destroyAllWindows()
 
 def calculatehumoments(image1,image2,label):
+    lst=[]
     MEIarray=list(cv2.HuMoments(cv2.moments(image1)).flatten())
     MHIarray=list(cv2.HuMoments(cv2.moments(image2)).flatten())
-    huarray.append([label,MEIarray,MHIarray])
+    lst.append(label)
+    for i in MEIarray:
+        lst.append(i)
+    huarray.append(lst)
 
 def createMEIsandMHIs(i,j,k):
-    cap=cv2.VideoCapture('input/PS7A%dP%dT%d.avi'%(i,j,k))
+    cap=cv2.VideoCapture('input/PS7A%dP%dT%d.mp4'%(i,j,k))
     firstFrame=None
     width,height=cap.get(3),cap.get(4)
     image1 = np.zeros((int(height), int(width)), np.uint8)
@@ -67,9 +71,12 @@ def createMEIsandMHIs(i,j,k):
     cap.release()
     cv2.destroyAllWindows()
 
-for i in range(3):
-    for j in range(3):
-        for k in range(3):
-            createMEIsandMHIs(i+1,j+1,k+1)
-    writefile(huarray)
-    print(huarray)
+# for i in range(3):
+#     for j in range(3):
+#         for k in range(3):
+#             createMEIsandMHIs(i+1,j+1,k+1)
+for j in range(3):
+    for k in range(3):
+        createMEIsandMHIs(4,j+1,k+1)
+
+    writefile(huarray,"output/mei.csv")
