@@ -75,8 +75,9 @@ def createMEIsandMHIs(i,j,k):
 #     for j in range(3):
 #         for k in range(3):
 #             createMEIsandMHIs(i+1,j+1,k+1)
+
 for j in range(3):
     for k in range(3):
-        createMEIsandMHIs(4,j+1,k+1)
+        createMEIsandMHIs(j+1,5,k+1)
 
     writefile(huarray,"output/mei.csv")
