@@ -39,7 +39,7 @@ def calculatehumoments(image1,image2,label):
     huarray.append(lst)
 
 def createMEIsandMHIs(i,j,k):
-    cap=cv2.VideoCapture('input/PS7A%dP%dT%d.mp4'%(i,j,k))
+    cap=cv2.VideoCapture('input/PS7A%dP%dT%d.avi'%(i,j,k))
     firstFrame=None
     width,height=cap.get(3),cap.get(4)
     image1 = np.zeros((int(height), int(width)), np.uint8)
@@ -71,13 +71,9 @@ def createMEIsandMHIs(i,j,k):
     cap.release()
     cv2.destroyAllWindows()
 
-# for i in range(3):
-#     for j in range(3):
-#         for k in range(3):
-#             createMEIsandMHIs(i+1,j+1,k+1)
-
-for j in range(3):
-    for k in range(3):
-        createMEIsandMHIs(j+1,5,k+1)
+for i in range(3):
+    for j in range(3):
+        for k in range(3):
+            createMEIsandMHIs(i+1,j+1,k+1)
 
     writefile(huarray,"output/mei.csv")
