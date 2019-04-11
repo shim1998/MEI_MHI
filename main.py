@@ -4,9 +4,11 @@ import imutils
 import cv2
 import pandas as pd
 
-def writefile(a):
-    df=pd.Dataframe(a)
-    with open("output/dataset.csv",'a') as f:
+huarray=[]
+
+def writefile(data):
+    df=pd.DataFrame(np.array(data,dtype="object"),columns=['Label','MEI','MHI'])
+    with open("output/dataset.csv",'w+') as f:
         df.to_csv(f,mode='a',header=False)
 
 def videoplay():
@@ -27,15 +29,10 @@ def videoplay():
     cap.release()
     cv2.destroyAllWindows()
 
-huarray=[]
-def calculatehumoments(image1,image2,i):
-    label=[]
-    MEIarray=[]
-    MHIarray=[]
-    label.append(i)
-    MEIarray.append(list(cv2.HuMoments(cv2.moments(image1)).flatten()))
-    MHIarray.append(list(cv2.HuMoments(cv2.moments(image2)).flatten()))
-    writefile([i,MEIarray,MHIarray])
+def calculatehumoments(image1,image2,label):
+    MEIarray=list(cv2.HuMoments(cv2.moments(image1)).flatten())
+    MHIarray=list(cv2.HuMoments(cv2.moments(image2)).flatten())
+    huarray.append([label,MEIarray,MHIarray])
 
 def createMEIsandMHIs(i,j,k):
     cap=cv2.VideoCapture('input/PS7A%dP%dT%d.avi'%(i,j,k))
@@ -63,10 +60,10 @@ def createMEIsandMHIs(i,j,k):
         image2=cv2.addWeighted(image2,1,thresh,ctr/1000,0)
         ctr+=1
         if cv2.waitKey(1)& 0xFF == ord('q'):
-            break  
-    cv2.imwrite("output/MEI%d%d%d.jpg"%(i,j,k),image1)  
+            break
+    cv2.imwrite("output/MEI%d%d%d.jpg"%(i,j,k),image1)
     cv2.imwrite("output/MHI%d%d%d.jpg"%(i,j,k),image2)
-    calculatehumoments(image1,image2,i) 
+    calculatehumoments(image1,image2,i)
     cap.release()
     cv2.destroyAllWindows()
 
@@ -74,3 +71,5 @@ for i in range(3):
     for j in range(3):
         for k in range(3):
             createMEIsandMHIs(i+1,j+1,k+1)
+    writefile(huarray)
+    print(huarray)
